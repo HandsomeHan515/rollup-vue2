@@ -37,3 +37,13 @@ export function isValidArrayIndex (val) {
     const n = parseFloat(String(val))
     return n >= 0 && Math.floor(n) === n && isFinite(val)
 }
+
+export function toArray (list, start) {
+    start = start || 0
+    let i = list.length - start
+    const ret = new Array(i)
+    while (i--) {
+        ret[i] = list[i + start]
+    }
+    return ret
+}

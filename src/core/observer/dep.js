@@ -11,13 +11,14 @@ export default class Dep {
         this.subs.push(sub)
     }
 
-    remove (sub) {
+    removeSub (sub) {
         remove(this.subs, sub)
     }
 
     depend () {
         if (window.target) {
-            this.addSub(window.target)
+            // this.addSub(window.target)
+            window.target.addDep(this)
         }
     }
 

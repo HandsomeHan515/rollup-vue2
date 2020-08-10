@@ -1,4 +1,4 @@
-import { hasProto, def, hasOwn, isObject } from '../util/index'
+import { hasProto, def, hasOwn, isObject, isValidArrayIndex } from '../util/index'
 import { arrayMethods } from './array'
 import Dep from './dep'
 import Watcher from './watcher'
@@ -81,4 +81,49 @@ export function defineReactive (data, key, val) {
             dep.notify()
         }
     })
+}
+
+export function set (target, key, val) {
+    // 处理数组
+    if (Array.isArray(target) && isValidArrayIndex(key)) {
+        target.length = Math.max(target.length, key)
+        target.splice(key, 1, val)
+        console.log(target)
+        return val
+    }
+
+    // key 已经存在于 target 中
+    if (key in target && !(key in Object.prototype)) {
+        target[key] = val
+        return val
+    }
+
+    const ob = target.__ob__
+    // 非响应式数据
+    if (!ob) {
+        target[key] = val
+        return val
+    }
+    // 新增的属性
+    defineReactive(ob.value, key, val)
+    ob.dep.notify()
+    return val
+}
+
+export function del (target, key) {
+    if (Array.isArray(target) && isValidArrayIndex(key)) {
+        target.splice(key, 1)
+        return
+    }
+
+    const ob = target.__ob__
+    // key 不是 target 自身属性
+    if (!hasOwn(target, key)) {
+        return
+    }
+    delete target[key]
+    if (!ob) { // 不是响应式的不需触发送通知
+        return
+    }
+    ob.dep.notify()
 }

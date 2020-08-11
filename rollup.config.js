@@ -1,8 +1,9 @@
 import babel from '@rollup/plugin-babel';
 import serve from 'rollup-plugin-serve';
+import replace from '@rollup/plugin-replace';
 
 export default {
-    input: './src/core/instance/index.js',
+    input: './src/core/index.js',
     output: {
         format: 'umd',
         name: 'Vue',
@@ -17,6 +18,9 @@ export default {
             port: 3000,
             contentBase: '',
             openPage: '/index.html'
+        }),
+        replace({
+            '__VERSION__': '1.0.0'
         })
     ]
 }

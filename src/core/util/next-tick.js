@@ -73,7 +73,3 @@ export function nextTick (cb, ctx) {
         })
     }
 }
-
-nextTick(function () {
-    console.log(this.name)
-}, { name: 'han' })

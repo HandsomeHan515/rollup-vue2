@@ -1,3 +1,6 @@
+/**
+ * 事件相关的实例方法 $on $once $off $emit
+ */
 import { toArray } from '../util/index'
 
 export function initEvents (vm) {

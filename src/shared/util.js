@@ -47,3 +47,5 @@ export function toArray (list, start) {
     }
     return ret
 }
+
+export function noop (a, b, c) { }

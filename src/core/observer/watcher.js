@@ -4,6 +4,8 @@ import { traverse } from './traverse'
 export default class Watcher {
     constructor(vm, expOrFn, cb, options) {
         this.vm = vm
+        vm._watchers.push(this)
+
         if (options) {
             this.deep = !!options.deep
         } else {

@@ -1,4 +1,6 @@
-import { remove } from "../util"
+import { remove, noop } from "../util/index"
+import { createEmptyVNode } from "../vdom/vnode"
+import Watcher from "../observer/watcher"
 
 export function initLifecycle (vm) {
     vm._watcher = null
@@ -43,4 +45,19 @@ export function lifecycleMixin (Vue) {
         // 移除所有监听器
         vm.$off()
     }
+}
+
+export function mountComponent (vm, el) {
+    if (!vm.$options.render) {
+        vm.$options.render = createEmptyVNode
+    }
+
+    // callHook(vm, 'beforeMount')
+
+    vm._watcher = new Watcher(vm, () => {
+        vm._update(vm._render())
+    }, noop)
+
+    // callHook(vm, 'mounted')
+    return vm
 }

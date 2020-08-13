@@ -62,3 +62,11 @@ const _toString = Object.prototype.toString
 export function isPlainObject (obj) {
     return _toString.call(obj) === '[object Object]'
 }
+
+const camelizeRE = /-(\w)/g
+export const camelize = str => {
+    return str.replace(camelizeRE, (_, c, offset, string) => {
+        console.log('han', _, c, offset, string)
+        return c ? c.toUpperCase() : ''
+    })
+}

@@ -3,7 +3,25 @@ import { createEmptyVNode } from "../vdom/vnode"
 import Watcher from "../observer/watcher"
 
 export function initLifecycle (vm) {
+    const options = vm.$options
+
+    let parent = options.parent
+    if (parent && !options.abstract) {
+        while (parent.$options.abstract && parent.$parent) {
+            parent = parent.$parent
+        }
+        parent.$children.push(vm)
+    }
+
+    vm.$parent = parent
+    vm.$root = parent ? parent.$root : vm
+
+    vm.$children = []
+    vm.$refs = {}
+
     vm._watcher = null
+    vm._isDestroyed = false
+    vm._isBeingDestroyed = false
 }
 
 /**
@@ -60,4 +78,18 @@ export function mountComponent (vm, el) {
 
     // callHook(vm, 'mounted')
     return vm
+}
+
+
+export function callHook (vm, hook) {
+    const handlers = vm.$options[hook]
+    if (handlers) {
+        for (let i = 0; i < handlers.length; i++) {
+            try {
+                handlers[i].call(vm)
+            } catch (error) {
+                // handleError
+            }
+        }
+    }
 }

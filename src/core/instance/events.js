@@ -2,10 +2,35 @@
  * 事件相关的实例方法 $on $once $off $emit
  */
 import { toArray } from '../util/index'
+import { updateListeners } from '../vdom/helpers/index'
 
 export function initEvents (vm) {
     vm._events = Object.create(null)
+    const listeners = vm.$options._parentListeners
+    if (listeners) {
+        updateComponentListeners(vm, listeners)
+    }
 }
+
+let target
+
+function add (event, fn, once) {
+    if (once) {
+        target.$once(event, fn)
+    } else {
+        target.$on(event, fn)
+    }
+}
+
+function remove (event, fn) {
+    target.$off(event, fn)
+}
+
+export function updateComponentListeners (vm, listeners, oldListeners) {
+    target = vm
+    updateListeners(listeners, oldListeners || {}, add, remove, vm)
+}
+
 
 export function eventsMixin (Vue) {
     Vue.prototype.$on = function (event, fn) {

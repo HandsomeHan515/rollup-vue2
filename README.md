@@ -1,3 +1,3 @@
 # rollup-vue
 
-rollup init vue observer (object&array)
+rollup init vue2 observer (object&array)
